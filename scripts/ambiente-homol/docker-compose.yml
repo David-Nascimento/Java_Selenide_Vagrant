@@ -1,0 +1,57 @@
+version: '3'
+services:
+    
+    pgdb:
+        image: postgres:9.6.22-stretch
+        environment: 
+            - POSTGRES_PASSWORD=qaninja
+        expose: 
+            - "5432"
+        ports: 
+            - "5432:5432"
+        networks: 
+            - skynet
+
+    pgadmin:
+        image: dpage/pgadmin4:5.4
+        environment: 
+            - PGADMIN_DEFAULT_EMAIL=root@qaninja.io
+            - PGADMIN_DEFAULT_PASSWORD=qaninja
+        expose: 
+            - "15432"
+        ports: 
+            - "15432:80"
+        networks: 
+            - skynet
+        depends_on: 
+            - "pgdb"
+    
+    ninjaplus-api:
+        image: qaninja/ninjaplus-api
+        environment: 
+            - DATABASE=pgdb
+        expose: 
+            - "3000"
+        ports: 
+            - "3000:3000"
+        networks: 
+            - skynet
+        depends_on: 
+            - "pgadmin"
+
+    ninjaplus-web:
+        image: qaninja/ninjaplus-web
+        environment: 
+            - VUE_APP_API=http://ambientehomol_ninjaplus-api_1:3000
+        expose: 
+            - "5000"
+        ports: 
+            - "5000:5000"
+        networks: 
+            - skynet
+        depends_on: 
+            - "ninjaplus-api"
+
+networks: 
+    skynet:
+        driver: bridge
