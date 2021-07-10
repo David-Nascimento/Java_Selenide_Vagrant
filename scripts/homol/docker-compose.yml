@@ -17,7 +17,7 @@ services:
             - PGADMIN_DEFAULT_PASSWORD=qaninja
         ports: 
             - "15432:80"
-        networks: 
+        networks:
             - skynet
         depends_on: 
             - "pgdb"
@@ -28,7 +28,7 @@ services:
             - DATABASE=pgdb
         ports: 
             - "3000:3000"
-        networks: 
+        networks:
             - skynet
         depends_on: 
             - "pgadmin"
@@ -36,12 +36,12 @@ services:
     ninjaplus-web:
         image: qaninja/ninjaplus-web
         environment: 
-            - VUE_APP_API=http://localhost:3000
+            - VUE_APP_API=http://192.168.33.10:3000
         ports: 
             - "5000:5000"
-        networks: 
+        networks:
             - skynet
 
-networks: 
+networks:
     skynet:
         driver: bridge
