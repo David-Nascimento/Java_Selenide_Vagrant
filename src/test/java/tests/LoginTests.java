@@ -1,9 +1,14 @@
+package tests;
+
+import com.codeborne.selenide.Configuration;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import pages.LoginPage;
+import pages.SideBar;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
 
 public class LoginTests {
 
@@ -17,32 +22,40 @@ public class LoginTests {
         };
     }
 
+    protected static LoginPage login;
+    protected static SideBar   side;
+    @BeforeMethod
+    public void start() {
+        System.setProperty("webdriver.chrome.driver", "webDrivers\\chromedriver.exe");
+        Configuration.browser = "chrome";
+        Configuration.browser = "http://192.168.33.10:5000";
+
+        side = new SideBar();
+    }
+
     @Test
     public void LoginSucesso() {
-       System.setProperty("webdriver.chrome.driver", "webDrivers\\chromedriver.exe");
-       isChrome();
-       open("http://192.168.33.10:5000");
+        login
+                .open()
+                .with("magrones@ninjaplus.com", "pwd123");
 
-       $("#emailId").setValue("magrones@ninjaplus.com");
-       $("#passId").setValue("pwd123");
-       $("#login").click();
-
-       $(".user .info span").shouldHave(text("David"));
+       side
+               .loggedUser()
+               .shouldHave(text("David"));
     }
 
     @Test(dataProvider = "login-alerts")
     public void PasswordIncorreto(String email, String password, String expectAlert) {
-        System.setProperty("webdriver.chrome.driver", "webDrivers\\chromedriver.exe");
-        isChrome();
 
-        executeJavaScript("localStorage.clear();");
-        open("http://192.168.33.10:5000");
+        login
+                .open()
+                .with(email, password)
+                .alert().shouldHave((text(expectAlert)));
+    }
 
-        $("#emailId").setValue(email);
-        $("#passId").setValue(password);
-        $("#login").click();
-
-        $(".alert span").shouldHave((text(expectAlert)));
+    @AfterMethod
+    public void clearup() {
+        login.clearSession();
     }
 
 }

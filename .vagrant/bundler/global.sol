@@ -1,1 +1,1 @@
-{"dependencies":[["vagrant-disksize",["= 0.1.3"]]],"checksum":"3128d09101e6efa5f8c507ea9d6508a1f38605aa4b10ca6d3e60349a0018c793","vagrant_version":"2.2.16"}
+{"dependencies":[["vagrant-docker-compose",["= 1.5.1"]]],"checksum":"7896f26c9cbd7c4b4bdd1a04a14be434dc97b9047f0005f4ff74fde7e45c914b","vagrant_version":"2.2.16"}
