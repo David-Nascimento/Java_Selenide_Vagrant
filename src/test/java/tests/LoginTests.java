@@ -1,10 +1,7 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pages.LoginPage;
 import pages.SideBar;
 
@@ -24,17 +21,19 @@ public class LoginTests {
 
     protected static LoginPage login;
     protected static SideBar   side;
+
     @BeforeMethod
     public void start() {
         System.setProperty("webdriver.chrome.driver", "webDrivers\\chromedriver.exe");
         Configuration.browser = "chrome";
         Configuration.browser = "http://192.168.33.10:5000";
 
+        login = new LoginPage();
         side = new SideBar();
     }
 
     @Test
-    public void LoginSucesso() {
+    public void LoginSuccess() {
         login
                 .open()
                 .with("magrones@ninjaplus.com", "pwd123");
@@ -45,7 +44,7 @@ public class LoginTests {
     }
 
     @Test(dataProvider = "login-alerts")
-    public void PasswordIncorreto(String email, String password, String expectAlert) {
+    public void PasswordIncorrect(String email, String password, String expectAlert) {
 
         login
                 .open()
@@ -54,8 +53,9 @@ public class LoginTests {
     }
 
     @AfterMethod
-    public void clearup() {
-        login.clearSession();
+    public void clearUp() {
+        login
+                .clearSession();
     }
 
 }
